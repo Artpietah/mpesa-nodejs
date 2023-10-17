@@ -245,11 +245,36 @@ class Tcash {
 }
 class AirtelMoney {
 
-     constructor(){
+     constructor(CLIENT_ID,CLIENT_SECRET_KEY){
+        this.client_id = CLIENT_ID;
+        this.client_secret = CLIENT_SECRET_KEY;
 
      }
+  async Authorization(){
+    let authURL = 'https://openapiuat.airtel.africa/auth/oauth2/token'
+    let payload = {
+        "client_id": this.client_id,
+        "client_secret": this.client_secret,
+        "grant_type": "client_credentials"
+    }
+    try {
+        let {data} = await axios.post(authURL, payload, {
+            'headers':{
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+                }
+        });
+        return data;
+    } catch (error) {
+        return({
+            "error": error,
+            "message": "Error generating Auth token",
 
+        })
+    }
+
+  }
 
 }
 
-module.exports = {Mpesa};
+module.exports = {Mpesa, AirtelMoney};
